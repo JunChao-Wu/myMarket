@@ -15,7 +15,7 @@ router.post('/addGoods', async (req, res) => {
 
   let goodsObj = {};
   let name = escape(req.body.goodName);
-
+  goodsObj.name = name;
   let goodsDao = new GoodsDao(pool);
   let isExisted = await goodsDao.isExistedGoods(name)
   if (isExisted) {
@@ -33,10 +33,14 @@ router.post('/addGoods', async (req, res) => {
   goodsObj.category_id = category_id_arr[0].categoryID;
   let result = await goodsDao.addGoods(goodsObj);
 
-  if (result[0]) {
+  let goodsIdObj = await goodsDao.getGoodsIdAndName(name);
+  let result2 = await purchaseDao.addGoodsID(goodsIdObj);
+  if (result && result2) {
     res.send({msg: 'add success'})
-  }else {
+  }else if( !result ) {
     res.send({msg: 'add failed'})
+  } else if ( !result2 ) {
+    res.send({msg: 'update purchaseGoodsID failed'})
   }
 })
 

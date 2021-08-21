@@ -8,7 +8,6 @@ class goodsDao extends BaseDao {
   // 添加goods
   async addGoods(goodsObj) {
     let sql = "insert into s_goods(goods_name, category_id, stock) values('" + goodsObj.name + "'," + goodsObj.category_id + "," + goodsObj.stock +")";
-    console.log(sql)
     let result = await this.querySQL(sql);
     if (result) {
       return true;
@@ -60,9 +59,7 @@ class goodsDao extends BaseDao {
   // 
   async isExistedGoods(name) {
     let sql = "select * from s_goods where goods_name ='"+ name + "'";
-    console.log(sql)
     let result = await this.querySQL(sql);
-    console.log(result)
     if (result[0]) {
       return true;
     }else {
@@ -70,6 +67,13 @@ class goodsDao extends BaseDao {
     }
   }
 
+  async getGoodsIdAndName(name) {
+    let sql = "select id from s_goods where goods_name = '" + name + "'";
+
+    let result = await this.querySQL(sql);
+    result[0].name = name;
+    return result[0];
+  }
 }
 
 

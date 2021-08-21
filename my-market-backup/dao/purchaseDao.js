@@ -160,11 +160,10 @@ class purchaseDao extends BaseDao {
   // 添加goods时，向purchase对应数据添加goods_id
   async addGoodsID(addObj) {
     // addObj = {goodsID, goodName}
-    let sql = "update s_purchase set goods_id =" + addObj.goodsID + " where goodName = '" + addObj.goodName + "'";
+    let sql = "update s_purchase set goods_id =" + addObj.id + " where goodName = '" + addObj.name + "'";
 
     let result = await this.querySQL(sql);
-
-    if (result[0]) {
+    if (result) {
       return true;
     }else {
       return false;
@@ -172,12 +171,11 @@ class purchaseDao extends BaseDao {
   }
 
 
-  // 已删除goods，置空拥有该goods的数据的goods_id
+  // 已删除goods，置0拥有该goods的数据的goods_id
   async deleteGoodsID(goodsID) {
-    let sql = "update s_purchase set goods_id = null ";
+    let sql = "update s_purchase set goods_id = 0 ";
 
     sql += "where goods_id = " + goodsID;
-    console.log(sql)
 
     let result = this.querySQL(sql)
     if (result) {
