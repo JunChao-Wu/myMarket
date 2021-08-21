@@ -1,0 +1,44 @@
+.row-parent {
+  position: relative;
+}
+
+.row_style:hover {
+  transition: all 0.8s ease;
+  background-color: rgb(2, 159, 254, 0.2);
+}
+.cell_style {
+  font-size: 1em;
+  box-sizing: border-box;
+  height: 40px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+
+/* .row-style {
+  transition: all 0.8s ease;
+}
+.row-style > * {
+  transition: all 0.8s ease;
+  overflow: hidden;
+}
+.rowDynamic-enter,
+.rowDynamic-leave-to {
+  opacity: 0;
+  transform: translateY(80px);
+}
+.rowDynamic-enter > *,
+.rowDynamic-leave-to > * {
+  opacity: 0;
+}
+.rowDynamic-enter-active,
+.rowDynamic-leave-active {
+  transition: all 0.8s ease;
+}
+
+.rowDynamic-move {
+  transition: all 0.8s ease;
+}
+.rowDynamic-leave-active {
+  position: absolute;
+} */

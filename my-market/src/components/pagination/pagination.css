@@ -1,0 +1,23 @@
+/* next/prev */
+.pagination_btn_next,
+.pagination_btn_prev {
+  display: inline-block;
+  padding: 0;
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: 13px;
+  color: #6e6d7a;
+  background-color: rgba(110, 109, 122, 0.2);
+}
+.pagination_btn_next:hover,
+.pagination_btn_prev:hover  {
+  background-color: rgba(2, 159, 254, 0.2);
+}
+
+/* total */
+.pagination_total {
+  /* color: #029ffe; */
+  padding-right: 10px;
+  font-size: 14px;
+}

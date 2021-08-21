@@ -1,0 +1,69 @@
+{
+  "admin": [
+    {
+      "name": "系统设置",
+      "to": "setting"
+    }
+  ],
+
+  "senior": [
+    {
+      "name": "商品管理",
+        "to": "goods"
+    },
+    {
+      "name": "进货管理",
+      "to": "purchase"
+    },
+    {
+      "name": "售货管理",
+      "to": "path3"
+    },
+    {
+      "name": "用户管理",
+      "to": "path4"
+    },
+    {
+      "name": "类别设置",
+      "to": "category"
+    },
+    {
+      "name": "日志信息",
+      "to": "path5"
+    },
+    {
+      "name": "系统设置",
+      "to": "setting"
+    }
+  ],
+
+  "middle": [
+    {
+      "name": "商品管理",
+      "to": "path"
+    },
+    {
+      "name": "进货管理",
+      "to": "path"
+    },
+    {
+      "name": "售货管理",
+      "to": "path"
+    },
+    {
+      "name": "类别设置",
+      "to": "category"
+    },
+    {
+      "name": "日志信息",
+        "to": "path"
+    }
+  ],
+
+  "primary": [
+    {
+      "name": "商品管理",
+      "to": "path"
+    }
+  ]
+}
