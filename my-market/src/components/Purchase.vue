@@ -260,8 +260,11 @@ export default {
       await this._axios.post('/category/getCategory').then(res => {
         this.categoryList = res.data;
         this.categoryList.map(obj => {
-          obj.name = obj.category_name;
+          // 将数据的属性修改为适合eSelect组件使用
+          obj.label = obj.category_name;
+          obj.value = obj.id;
           delete obj.category_name;
+          delete obj.id;
         });
       })
     },
@@ -355,7 +358,7 @@ export default {
         if (item == 'categoryID') {
           // 向eSelect组件提供初始化选项
           this.categoryList.forEach(categoryObj => {
-            if (categoryObj.name == selectCategoryName) {
+            if (categoryObj.label == selectCategoryName) {
               this.initOption = categoryObj;
               refs[item].value = categoryObj.id;
               return;
