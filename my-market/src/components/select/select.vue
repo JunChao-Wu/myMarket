@@ -18,15 +18,16 @@
         class="options-block">
         <li
           v-for="obj in optionList"
-          :key="obj.id"
-          :value="obj.id"
+          :key="obj.value"
+          :value="obj.value"
           class="option-cell"
           @click="optionChoosed">
-            {{ obj.name }}
+            {{ obj.label }}
           </li>
       </ul>
   </div>
 </template>
+
 
 <script>
 import {deepCloneObject} from '../util/util';
@@ -65,17 +66,17 @@ export default {
       immediate: true,
       handler(newval) {
         if ( JSON.stringify(newval) == "{}" ) {
-          this.selectID = 0;
+          this.selectValue = null;
           this.choosedContent = '';
         }
         if( JSON.stringify(newval) !== "{}" ) {
           this.innerInitOption = deepCloneObject(newval);
-          this.selectID = this.innerInitOption.id;
-          this.choosedContent = this.innerInitOption.name;
+          this.selectValue = this.innerInitOption.value;
+          this.choosedContent = this.innerInitOption.label;
         }
       }
     },
-    selectID: {
+    selectValue: {
       immediate: true,
       handler(newval) {
         if (newval) {
@@ -89,17 +90,15 @@ export default {
       this.focus = !this.focus;
     },
     optionChoosed(e) {
-      // e.target.textContent
-      // e.target.value --- id
       this.focus = !this.focus;
       this.choosedContent = e.target.textContent;
-      this.selectID = e.target.value;
+      this.selectValue = e.target.value;
     }
   },
   data() {
     return {
       focus: false,
-      selectID: 0,
+      selectValue: null,
       choosedContent: '',
       innerInitOption: {}
     }

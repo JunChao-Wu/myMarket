@@ -18,8 +18,8 @@ handlerChoosed|当前选中的值|选中的值改变时就会触发
 ## **对initOption和optionList的补充说明**
 参数名|说明
 ---|---
-optionList| 是一个对象数组，对象包含id和name两个属性
-iniOption|  是一个对象，对象包含id和name两个属性
+optionList| 是一个对象数组，对象包含value和label两个属性
+iniOption|  是一个对象，对象包含value和label两个属性
 
 
 > **注意：** 因文件名与html标签相同，因此在引入时注意适当修改组件名称
