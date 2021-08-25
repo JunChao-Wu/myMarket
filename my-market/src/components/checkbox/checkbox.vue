@@ -18,7 +18,9 @@ import './checkbox.css'
 export default {
   name: "checkBox",
   props: {
-    id: Number || String,
+    value: {
+      type: Number
+    },
     // 接受normal, allChecked, noChecked 三个参数来控制checkbox的选择状态
     checkboxStates: {
       require: true,
@@ -30,17 +32,11 @@ export default {
     return {
       isChecked: false,
       focus:  false,
-      // checkbox,id数组
+      // checkbox,value
       seletion: Number
     }
   },
   computed: {
-    // checkboxStates() {
-    //   return this.store.states.checkboxStates;
-    // },
-    // seletions() {
-    //   return this.store.states.seletions;
-    // }
   },
   watch: {
     seletion: {
@@ -72,11 +68,11 @@ export default {
       handler(newVal) {
       /* 判断isChecked是否为真，真-删，假-添 */
         if (newVal) {
-          this.seletion = this.id;
+          this.seletion = this.value;
         }else {
-          // this.deleteSeletion(this.seletions, this.id)
+          // this.deleteSeletion(this.seletions, this.value)
           this.seletion = 0;
-          this.$emit('deleteSeletion', this.id)
+          this.$emit('deleteSeletion', this.value)
         }
       }
     }

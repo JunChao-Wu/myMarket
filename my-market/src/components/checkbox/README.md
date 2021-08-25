@@ -1,7 +1,7 @@
 ## **checkbox参数说明**
 参数名|类型|默认值|可选值|说明
 ---|:---:|:---:|:---:|---
-id|Number/String|——|——|接受id作为checkbox的值
+value|Number|——|——|接受value作为checkbox的值
 checkboxStates|String|normal|接受normal, allChecked, noChecked|该参数用来控制checkbox的选择状态
 
 ## **checkbox事件**
