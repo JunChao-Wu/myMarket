@@ -35,15 +35,15 @@ export default {
       type: Boolean,
       required: true
     },
-    lazyTree: {
-      type: Object,
-      default() {
-        return {
-          hasChildren: 'hasChildren',
-          children: 'children'
-        }
-      }
-    }
+    // lazyTree: {
+    //   type: Object,
+    //   default() {
+    //     return {
+    //       hasChildren: 'hasChildren',
+    //       children: 'children'
+    //     }
+    //   }
+    // }
   },
   computed: {
     seletions() {
@@ -81,12 +81,7 @@ export default {
       }
     },
 
-    lazyTree: {
-      immediate: true,
-      handler(newval) {
-        this.store.states.lazyTree = newval;
-      }
-    }
+
   },
 
   data() {

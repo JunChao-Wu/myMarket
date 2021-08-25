@@ -10,7 +10,7 @@ export default {
     label: String || "",
     prop: String,
     width: String,
-    sortable: Boolean || false
+    // sortable: Boolean || false
   },
   data() {
     return {

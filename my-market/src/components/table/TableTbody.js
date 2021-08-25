@@ -70,11 +70,12 @@ export default {
       let prop = column.prop;
       let value = dataObj[prop];
       if(type == 'checkbox') {
+        value = Number(value);
         return (
           <td
             class="cell_style">
             <check-box
-              id={value}
+              value={value}
               ongetCheckboxSetion={this.getCheckboxSetion}
               ondeleteSeletion={this.deleteSeletion}></check-box>
           </td>
