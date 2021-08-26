@@ -122,7 +122,7 @@ class purchaseDao extends BaseDao {
 
   // 下面的都是特定功能型接口
 
-  // 获取goods库存
+  // 获取给goods库存
   async getGoodsStock(name) {
     name = name || '';
     if (!name) {
@@ -184,6 +184,24 @@ class purchaseDao extends BaseDao {
       return false;
     }
   }
+
+
+  async getPurchaseName() {
+    let sql = "select goodName from s_purchase where isdeleted = 0"
+
+    let result = await this.querySQL(sql)
+    result.forEach(obj => {
+      obj.goodName = unescape(obj.goodName)
+    })
+    if(result[0]) {
+      return result;
+    }else {
+      return false;
+    }
+  }
+
+
+
 }
 
 
