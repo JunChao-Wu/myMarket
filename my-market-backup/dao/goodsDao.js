@@ -19,12 +19,12 @@ class goodsDao extends BaseDao {
 
   // 获取goods
   async getGoods(getObj) {
-    // getObj = {start, pageSize}
+    // getObj = {start, pageSize, search}
     let search = getObj.search || '';
     let sql = "select * from s_goods ";
     if (search) {
       search = escape(search);
-      sql += "where goods_name =" + search + " ";
+      sql += "where goods_name = '" + search + "' ";
     }
     sql += "limit " + getObj.start + "," + getObj.pageSize;
 
