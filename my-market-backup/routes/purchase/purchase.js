@@ -34,9 +34,9 @@ router.post('/addPurchase', async (req, res) => {
 
   // 向前端发送成功信息
   if(result) {
-    res.send({msg: 'add success'})
+    res.json({msg: 'add success'})
   }else {
-    res.send({msg: 'add failed'})
+    res.json({msg: 'add failed'})
   }
 })
 
@@ -78,9 +78,9 @@ router.post('/getPurchase', async (req, res) => {
   resResult.total = total;
   // console.log('获取了')
   if(tempData && total) {
-    res.send(resResult)
+    res.json(resResult)
   }else {
-    res.send({msg: 'get failed'})
+    res.json({msg: 'get failed'})
   }
 })
 
@@ -94,9 +94,9 @@ router.post('/deletePurchase', async (req, res) => {
   // console.log('删除了')
 
   if(result) {
-    res.send({msg: 'delete success'})
+    res.json({msg: 'delete success'})
   }else {
-    res.send({msg: 'delete failed'})
+    res.json({msg: 'delete failed'})
   }
 })
 
@@ -131,10 +131,35 @@ router.post('/editPurchase', async (req, res) => {
   // 向前端发送成功信息
 
   if(result) {
-    res.send({msg: 'edit success'})
+    res.json({msg: 'edit success'})
   }else {
-    res.send({msg: 'edit failed'})
+    res.json({msg: 'edit failed'})
   }
 })
 
+
+
+// 特殊接口
+
+// 获取select用id和name
+router.post('/getPurchaseNameList', async (req, res) => {
+  let purchaseDao = new PurchaseDao(pool);
+  let nameList = await purchaseDao.getPurchaseName();
+  // name去重
+  let tempObj = {};
+  let result = [];
+  nameList.forEach(obj => {
+    let name = obj.goodName;
+    if (tempObj[name] !== name) {
+      tempObj[name] = name;
+      result.push(obj);
+    }
+  })
+
+  if(result) {
+    res.json(result)
+  }else {
+    res.json({msg: 'get failed'})
+  }
+})
 module.exports = router;

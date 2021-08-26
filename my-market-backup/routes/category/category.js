@@ -13,9 +13,9 @@ router.post('/addCategory', async (req, res) => {
   let categoryDao = new CategoryDao(pool);
   let result =  await categoryDao.addCategory(obj.name);
   if(result) {
-    res.send({msg: 'add success'})
+    res.json({msg: 'add success'})
   }else {
-    res.send({msg: 'add failed'})
+    res.json({msg: 'add failed'})
   }
 })
 
@@ -24,14 +24,14 @@ router.post('/deleteCategory', async (req, res) => {
   let obj = req.body;
   // console.log(obj)
   if(obj.id == null || obj.id == '') {
-    res.send({msg: 'delete failed'})
+    res.json({msg: 'delete failed'})
   }
   let categoryDao = new CategoryDao(pool);
   let result = await categoryDao.deleteCategory(obj.id);
   if(result) {
-    res.send({msg: 'delete success'})
+    res.json({msg: 'delete success'})
   }else {
-    res.send({msg: 'delete failed'})
+    res.json({msg: 'delete failed'})
   }
 })
 
@@ -40,9 +40,9 @@ router.post('/getCategory', async (req, res) => {
   let categoryDao = new CategoryDao(pool);
   let resultList = await categoryDao.getCategory();
   if(resultList) {
-    res.send(resultList)
+    res.json(resultList)
   }else {
-    res.send({msg: 'get failed'})
+    res.json({msg: 'get failed'})
   }
 })
 

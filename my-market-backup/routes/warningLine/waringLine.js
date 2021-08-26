@@ -13,9 +13,9 @@ router.post('/getWarningLine', async (req, res) => {
   let warning_line = await stockLimitDao.getStockLimit();
   if(warning_line) {
     result.stock_limit = warning_line.stock_limit;
-    res.send(result)
+    res.json(result)
   }else{
-    res.send({msg: 'get failed'})
+    res.json({msg: 'get failed'})
   }
 })
 
@@ -23,14 +23,14 @@ router.post('/getWarningLine', async (req, res) => {
 router.post('/editWarningLine', async (req, res) => {
   let limit = req.body.warningLine;
   if(limit == null || limit == '') {
-    res.send({msg: 'edit failed'})
+    res.json({msg: 'edit failed'})
   }
   let stockLimitDao = new StockLimitDao(pool);
   let result = await stockLimitDao.editStockLimit(limit) || false;
   if(result) {
-    res.send({msg: 'edit success'})
+    res.json({msg: 'edit success'})
   }else {
-    res.send({msg: 'edit failed'})
+    res.json({msg: 'edit failed'})
   }
 })
 

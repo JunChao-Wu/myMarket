@@ -5,6 +5,7 @@ const pool =  require('../../dao/dbUtil');
 
 const GoodsDao = require('../../dao/goodsDao')
 const PurchaseDao = require('../../dao/purchaseDao')
+const CategoryDao = require('../../dao/categoryDao')
 
 // 添加goods
 router.post('/addGoods', async (req, res) => {
@@ -19,7 +20,7 @@ router.post('/addGoods', async (req, res) => {
   let goodsDao = new GoodsDao(pool);
   let isExisted = await goodsDao.isExistedGoods(name)
   if (isExisted) {
-    res.send({msg: 'goods is existed'})
+    res.json({msg: 'goods is existed'})
     return;
   }
   let purchaseDao = new PurchaseDao(pool);
@@ -35,28 +36,40 @@ router.post('/addGoods', async (req, res) => {
 
   let goodsIdObj = await goodsDao.getGoodsIdAndName(name);
   let result2 = await purchaseDao.addGoodsID(goodsIdObj);
+
   if (result && result2) {
-    res.send({msg: 'add success'})
+    res.json({msg: 'add success'})
   }else if( !result ) {
-    res.send({msg: 'add failed'})
+    res.json({msg: 'add failed'})
   } else if ( !result2 ) {
-    res.send({msg: 'update purchaseGoodsID failed'})
+    res.json({msg: 'update purchaseGoodsID failed'})
   }
 })
 
 
 // 获取goods
 router.post('/getGoods', async (req, res) => {
+  // {currentPage, pageSize, search}
   let getObj = req.body;
   getObj.start = (getObj.currentPage - 1) * getObj.pageSize;
-
   let goodsDao = new GoodsDao(pool);
   let results = await goodsDao.getGoods(getObj)
-  console.log(results)
-  if (results) {
-    res.send(results)
+
+  let categoryDao = new CategoryDao(pool);
+  let categoryList = await categoryDao.getCategory();
+  // 替换category_id为category
+  results.forEach(obj => {
+    categoryList.forEach(cateObj => {
+      if (cateObj.id == obj.category_id) {
+        obj.category = cateObj.category_name;
+        delete obj.category_id;
+      }
+    })
+  })
+  if (results[0]) {
+    res.json(results)
   }else {
-    res.send({msg: 'get failed'})
+    res.json({msg: 'get failed'})
   }
 })
 
@@ -73,9 +86,9 @@ router.post('/deleteGoods', async (req, res) => {
   let isDeleted = purchaseDao.deleteGoodsID(deleteObj.id)
 
   if (result && isDeleted) {
-    res.send({msg: 'delete success'});
+    res.json({msg: 'delete success'});
   }else {
-    res.send({msg: 'delete failed'});
+    res.json({msg: 'delete failed'});
   }
 })
 
