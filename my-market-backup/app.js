@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors')
 
 /* 引入各路由模块 */
 const purchase = require('./routes/purchase/purchase');
@@ -10,6 +11,8 @@ const warningLine = require('./routes/warningLine/waringLine');
 const app = express()
 const port = 3000
 
+// 解决跨域
+app.use(cors())
 
 /* 静态文件启用 */
 app.use(express.static('./public'))
