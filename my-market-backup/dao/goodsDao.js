@@ -36,7 +36,22 @@ class goodsDao extends BaseDao {
     return results;
   }
 
-
+  async getTotal(obj) {
+    let total = 0;
+    let search = obj.search || '';
+    let sql = "select count(*)as total from s_goods "
+    if(search) {
+      search = escape(search);
+      /* 对名字模糊查询 */
+      sql += "and goodName like '%" + search + "%' "
+    }
+    let results = await this.querySQL(sql);
+    results.forEach(resultObj => {
+      total = resultObj.total;
+    })
+    // console.log(total)
+    return total;
+  }
   // async editGoods() {
 
   // }
@@ -45,7 +60,6 @@ class goodsDao extends BaseDao {
   // 删除goods
   async deleteGoods(id) {
     let sql = "delete from s_goods where id = " + id;
-
     let result = await this.querySQL(sql);
     if (result) {
       return true;
