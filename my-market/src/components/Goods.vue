@@ -2,6 +2,12 @@
   <div id="List-main">
     <!-- 工具栏开始 -->
     <div class="tools-bar">
+      <transition name="dialog">
+        <div id="dialog-main" v-if="dialog_control">
+          <span class="iconfont icon-jinggao"></span>
+          <span class="dialog-text" ref="dialogText">消息块</span>
+        </div>
+      </transition>
       <ul class="tools-main">
         <li class="search-main">
           <div class="search-info">
@@ -21,9 +27,7 @@
             <button class="goods-add-btn" @click="addGoods">添加</button>
         </li>
         <li class="btn-main">
-          <div>
-            <button class="goods-delete-btn" @click="deleteGoods">删除</button>
-          </div>
+          <button class="goods-delete-btn" @click="deleteGoods">删除</button>
         </li>
       </ul>
     </div>
@@ -32,9 +36,9 @@
     <div id="list-main" :key="updateKey">
       <list-table
         class="table_class"
+        @getCheckboxSeletions="getCheckboxSeletions"
         :dataSource="dataSource"
-        :isClearCheckbox="isClearCheckbox"
-        @getCheckboxSeletions="getCheckboxSeletions">
+        :isClearCheckbox="isClearCheckbox">
         <table-column
           width="5%"
           type="checkbox"
@@ -66,11 +70,13 @@ import ListTable from './table/ListTable.vue';
 import TableColumn from './table/TableColumn';
 import Pagination from './pagination/pagination';
 import eSelect from './select/select.vue';
+// import { cloneArr } from './util/util';
 export default {
   data() {
     return {
       oldKey: 1,
       updateKey: 1,
+      dialog_control: false,
       dataSource: [],
       total: 0,
       isClearCheckbox: false,
@@ -125,9 +131,17 @@ export default {
 
     // 添加
     async addGoods() {
+      let ref = this.$refs;
       let goodName = this.$refs["purchaseName"].value;
       if ( !goodName ) {
-
+        this.dialog_control = true;
+        this.$nextTick(function() {
+          ref["dialogText"].textContent = '需选择商品进行添加';
+          let _this = this;
+          setTimeout(function () {
+            _this.dialog_control = false;
+          }, 2000)
+        })
         return;
       }
       let addObj = {};
@@ -141,12 +155,12 @@ export default {
     },
 
     // 搜索
-    async goodsSearch() {
+    goodsSearch() {
       let getObj = {};
       getObj.currentPage = this.currentPage;
       getObj.pageSize = this.pageSize;
       getObj.search = this.goodsSearchName;
-      await this._axios.post('/goods/getGoods', getObj).then(res => {
+      this._axios.post('/goods/getGoods', getObj).then(res => {
         console.log(res)
         this.dataSource = res.data;
       })
@@ -155,20 +169,53 @@ export default {
     // 获取
     goods_get(pageObj) {
       this._axios.post('/goods/getGoods', pageObj).then(res => {
-        console.log(res)
+        // console.log(res.data.msg)
+        if (res.data.msg) {
+          return;
+        }
         this.dataSource = res.data;
       })
 
     },
 
     // 删除
-    deleteGoods() {
-
+    async deleteGoods() {
+      // 单选删除判断
+      // 非单选提示信息
+      let ref = this.$refs;
+      if (this.selections.length < 1) {
+        this.dialog_control = true;
+        console.log(this.selections)
+        this.$nextTick(function() {
+          // console.log(ref.dialogText)
+          ref["dialogText"].textContent = '仅允许单个数据进行删除操作';
+          let _this = this;
+          setTimeout(function () {
+            _this.dialog_control = false;
+          }, 2000)
+        })
+        return;
+      }
+      // 
+      let deleteObj = {};
+      deleteObj.id = this.selections[0];
+      let judge = false;
+      await this._axios.post('/goods/deleteGoods', deleteObj).then(res => {
+        console.log(res)
+        if (res.data.msg == 'delete success') {
+          judge = true;
+        }else {
+          judge = false;
+        }
+      })
+      if (judge) {
+        this.updateKey += 1;
+      }
     },
 
     // 获取table内传递回来的checkbox选择
-    getCheckboxSeletions(seletions) {
-      this.seletions = seletions;
+    getCheckboxSeletions(selections) {
+      this.selections = selections;
     },
     
   },
@@ -294,4 +341,45 @@ export default {
     }
   }
 }
+
+// #dialog-msg
+@media (min-width: 1199px) {
+  #dialog-main {
+    padding-left: 105px;
+  }
+}
+#dialog-main {
+  overflow: hidden;
+  position: fixed;
+  top: 146px;
+  left: 0;
+  display: flex;
+  width: 100%;
+  line-height: 40px;
+  // height: 100%;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(@basegray, 0.1);
+  transition: all .4s ease;
+  .icon-jinggao {
+    color: rgba(@basered, 0.8);
+    font-size: 1.5em;
+    padding-right: 6px;
+  }
+  .dialog-text {
+    font-size: 1em;
+    color: rgba(@basered, 0.8);
+  }
+}
+
+.dialog-enter,
+.dialog-leave-to {
+  opacity: 0;
+}
+.dialog-enter-active,
+.dialog-leave-active {
+  transition: all 0.8s ease;
+}
+
+
 </style>
