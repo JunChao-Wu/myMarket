@@ -55,13 +55,15 @@ router.post('/getGoods', async (req, res) => {
   // {currentPage, pageSize, search}
   let getObj = req.body;
   getObj.start = (getObj.currentPage - 1) * getObj.pageSize;
+
+  let result = {};
   let goodsDao = new GoodsDao(pool);
-  let results = await goodsDao.getGoods(getObj)
+  let goodsList = await goodsDao.getGoods(getObj)
 
   let categoryDao = new CategoryDao(pool);
   let categoryList = await categoryDao.getCategory();
   // 替换category_id为category
-  results.forEach(obj => {
+  goodsList.forEach(obj => {
     categoryList.forEach(cateObj => {
       if (cateObj.id == obj.category_id) {
         obj.category = cateObj.category_name;
@@ -69,9 +71,14 @@ router.post('/getGoods', async (req, res) => {
       }
     })
   })
-  if (results[0]) {
-    res.json(results)
-  }else if(results == []) {
+  result.goodsList = goodsList;
+
+  let total = await goodsDao.getTotal(getObj);
+  result.total = total;
+
+  if (goodsList[0] && total) {
+    res.json(result)
+  }else if(goodList == []) {
     res.json({msg: 'no data for now'})
   }else {
     res.json({msg: 'get failed'})
