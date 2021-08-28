@@ -98,7 +98,7 @@ export default {
     }
   },
   methods: {
-    // 获取
+    // 获取select组件的数据
     async getPurchaseNameList() {
       let resultList = [];
       await this._axios.post('/purchase/getPurchaseNameList').then(res => {
@@ -129,7 +129,7 @@ export default {
       
     },
 
-    // 添加
+    // 添加goods
     async addGoods() {
       let ref = this.$refs;
       let goodName = this.$refs["purchaseName"].value;
@@ -154,7 +154,7 @@ export default {
       this.updateKey += 1;
     },
 
-    // 搜索
+    // 搜索goods
     goodsSearch() {
       let getObj = {};
       getObj.currentPage = this.currentPage;
@@ -166,14 +166,15 @@ export default {
       })
     },
 
-    // 获取
+    // 获取goods列表
     goods_get(pageObj) {
       this._axios.post('/goods/getGoods', pageObj).then(res => {
-        // console.log(res.data.msg)
+        console.log(res)
         if (res.data.msg) {
           return;
         }
-        this.dataSource = res.data;
+        this.dataSource = res.data.goodsList;
+        this.total = res.data.total;
       })
 
     },
