@@ -184,7 +184,6 @@ export default {
     },
   data() {
     return {
-      num: 0,
       // 搜索内容
       searchVal: '',
       // 控制刷新组件
@@ -207,19 +206,7 @@ export default {
       // add, edit的错误提醒控制
       dialog_control: false,
       // 分类列表
-      categoryList: [
-        // {id: 1, name: "食品"},
-        // {id: 2, name: "生鲜"},
-        // {id: 3, name: "零食"},
-        // {id: 4, name: "宠物"},
-        // {id: 5, name: "宠物"},
-        // {id: 6, name: "宠物"},
-        // {id: 7, name: "宠物"},
-        // {id: 8, name: "宠物"},
-        // {id: 9, name: "宠物"},
-        // {id: 10,name: "宠物"},
-        // {id: 11,name: "宠物"},
-      ],
+      categoryList: [],
       initOption: {},
     }
   },
@@ -345,7 +332,7 @@ export default {
         })
         let _this = this;
         setTimeout(function() {
-        _this.dialog_control = false;
+          _this.dialog_control = false;
         }, 2000)
         return ;
       }
@@ -473,10 +460,20 @@ export default {
 
     /* 删除数据请求 */
     async axios_delete() {
+      let ref = this.$refs;
       let option = 'delete';
       let seletions = this.getSeletion(this.seletions, option);
 
-      if( !seletions ) {
+      if( seletions.length < 1 ) {
+        this.dialog_control = true;
+        this.$nextTick(function() {
+          // console.log(ref.dialogText)
+          ref["dialogText"].textContent = '需选择数据进行删除操作';
+          let _this = this;
+          setTimeout(function () {
+            _this.dialog_control = false;
+          }, 2000)
+        })
         return;
       }
       await this._axios.post('/purchase/deletePurchase', seletions).then(res => {
@@ -808,6 +805,11 @@ export default {
 
 
 // #dialog-msg
+@media (min-width: 1199px) {
+  #dialog-main {
+    padding-left: 105px;
+  }
+}
 #dialog-main {
   overflow: hidden;
   position: fixed;
@@ -820,6 +822,7 @@ export default {
   align-items: center;
   justify-content: center;
   background-color: rgba(@basegray, 0.1);
+  transition: all .4s ease;
   .icon-jinggao {
     color: rgba(@basered, 0.8);
     font-size: 1.5em;
