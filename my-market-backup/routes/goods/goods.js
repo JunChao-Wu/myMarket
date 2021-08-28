@@ -26,6 +26,9 @@ router.post('/addGoods', async (req, res) => {
   let purchaseDao = new PurchaseDao(pool);
   // 计算当前goodName的总库存
   let stockArr = await purchaseDao.getGoodsStock(name);
+  if (!stockArr || stockArr.length == 0) {
+    res.json({msg: 'add failed'})
+  }
   goodsObj.stock = stockArr.reduce((total, obj) => {
     return total += obj.stock;
   }, 0)
@@ -68,6 +71,8 @@ router.post('/getGoods', async (req, res) => {
   })
   if (results[0]) {
     res.json(results)
+  }else if(results == []) {
+    res.json({msg: 'no data for now'})
   }else {
     res.json({msg: 'get failed'})
   }
@@ -80,10 +85,12 @@ router.post('/deleteGoods', async (req, res) => {
   let deleteObj = req.body;
 
   let goodsDao = new GoodsDao(pool);
-  let result = goodsDao.deleteGoods(deleteObj.id);
-
-  let purchaseDao = new PurchaseDao(pool);
-  let isDeleted = purchaseDao.deleteGoodsID(deleteObj.id)
+  let result = await goodsDao.deleteGoods(deleteObj.id);
+  let isDeleted = false;
+  if (result) {
+    let purchaseDao = new PurchaseDao(pool);
+    isDeleted = await purchaseDao.deleteGoodsID(deleteObj.id)
+  }
 
   if (result && isDeleted) {
     res.json({msg: 'delete success'});
